@@ -1,5 +1,5 @@
 dynv6 ip updater
 
 ```bash
-curl -sL https://your_repository_url/install.sh | sudo bash
+curl -sL https://raw.githubusercontent.com/yoazmenda/dynv6-ip-updater/main/install.sh | sudo bash
 ```
