@@ -1,18 +1,7 @@
 import requests
+import sys
 import time
-import os
-
-# No need to load dotenv since we will prompt the user if values are missing
-
-def get_env_variable(var_name, prompt_message):
-    """
-    Tries to get an environment variable's value.
-    If not found, prompts the user for it.
-    """
-    value = os.getenv(var_name)
-    if value is None:
-        value = input(prompt_message)
-    return value
+import argparse
 
 def get_public_ip():
     try:
@@ -32,10 +21,7 @@ def update_dynv6(ipv4, zone, token):
     except Exception as e:
         print(f"Error updating dynv6: {e}")
 
-def main():
-    zone = get_env_variable("DYNV6_ZONE", "Please specify DYNV6_ZONE: ")
-    token = get_env_variable("DYNV6_TOKEN", "Please specify DYNV6_TOKEN: ")
-    
+def main(zone, token):
     last_ip = None
     while True:
         current_ip = get_public_ip()
@@ -45,5 +31,10 @@ def main():
         time.sleep(10)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Dynv6 IP Updater')
+    parser.add_argument('zone', type=str, help='Dynv6 Zone')
+    parser.add_argument('token', type=str, help='Dynv6 Token')
+    args = parser.parse_args()
+    
+    main(args.zone, args.token)
 

@@ -9,7 +9,7 @@ fi
 # Define installation directory
 INSTALL_DIR="$HOME/dynv6-ip-updater"
 
-# Check if INSTALL_DIR exists and prompt for action
+# Ensure the installation directory is clean
 if [ -d "$INSTALL_DIR" ]; then
     read -p "Installation directory already exists. Delete and proceed? [y/N] " response
     if [[ "$response" =~ ^[Yy]$ ]]; then
@@ -36,13 +36,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Create .env file if it doesn't exist
-if [ ! -f ".env" ]; then
-    echo "Creating .env file. Please configure it with your dynv6 credentials."
-    echo -e "DYNV6_ZONE=your_zone_name\nDYNV6_TOKEN=your_dynv6_token" > .env
-else
-    echo ".env file already exists. Please ensure it is configured correctly."
-fi
+# Prompt for Dynv6 credentials
+read -p "Enter your Dynv6 Zone: " dynv6_zone
+read -p "Enter your Dynv6 Token: " dynv6_token
 
 # Setup systemd service file (prompt for sudo password here)
 SERVICE_FILE="/etc/systemd/system/dynv6_ip_updater.service"
@@ -52,7 +48,7 @@ Description=Dynv6 IP Updater Service
 [Service]
 User=$USER
 WorkingDirectory=$INSTALL_DIR
-ExecStart=/usr/bin/python3 -m dynv6_ip_updater.updater
+ExecStart=/usr/bin/python3 $INSTALL_DIR/updater.py $dynv6_zone $dynv6_token
 
 [Install]
 WantedBy=multi-user.target" | sudo tee $SERVICE_FILE > /dev/null
