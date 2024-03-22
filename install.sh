@@ -4,7 +4,7 @@
 INSTALL_DIR="$HOME/dynv6-ip-updater"
 
 # Clone the repository
-git clone https://your-repository-url/dynv6-ip-updater.git $INSTALL_DIR
+git clone https://github.com/yoazmenda/dynv6-ip-updater.git $INSTALL_DIR
 if [ $? -ne 0 ]; then
     echo "Error cloning repository."
     exit 1
